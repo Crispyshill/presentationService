@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+   <head>
+      <meta charset="UTF-8" />
+      <link th:href="@{/css/home.css}" rel="stylesheet" />
+      <title>TranscendentTopicals</title>
+   </head>
+   <body>
+   <div class="top-banner">
+     <img th:src="@{/css/nature_banner.jpg}" alt="Banner Image">
+   </div>
+   <div class="navigation-banner">
+     <a th:class="${page == 'home' ? 'active' : ''}" href="/">Home</a>
+     <a th:class="${page == 'products' ? 'active' : ''}" href="products">Products</a>
+     <a th:class="${page == 'contact' ? 'active' : ''}" href="contact">Contact Us</a>
+     <a th:class="${page == 'about' ? 'active' : ''}" href="about">About</a>
+     <a th:class="${page == 'cart' ? 'active' : ''}" href="cart" id="cartMenuButton">Shopping Cart</a>
+     <a th:class="${page == 'account' ? 'active' : ''}" href="account" id="accountMenuButton">Account</a>
+   </div>
+       <div th:utext="${template}"></div>
+       <th:block th:if="${templateinclude}">
+    <div th:include="${templateinclude}"/>
+  </th:block>
+   </body>
+</html>

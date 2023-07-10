@@ -1,0 +1,16 @@
+/* Paragraph styles */
+p {
+    color: #555;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 12px; /* Add some bottom margin */
+}
+
+.brand-description {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+    background-color: #FFF;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
