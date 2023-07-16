@@ -1,12 +1,49 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
+    <link th:href="@{/css/products.css}" rel="stylesheet" />
     <title>Products</title>
 </head>
 <body>
-    <!-- Render the received template content -->
-    <div th:utext="${template}"></div>
+    <script th:src="@{/js/products.js}"></script>
 
+    <h1>Products</h1>
+
+    <div class="product-grid">
+        <!-- Add product form -->
+        <div  class="product" sec:authorize="hasRole('ADMIN')">
+            <form th:action="@{/addProduct}" method="post" enctype="multipart/form-data">
+                <div class="product-image">
+                    <label for="productImage">Upload Image</label>
+                    <input type="file" id="productImage" name="productImage" accept="image/*"  />
+                </div>
+                <div class="product-details">
+                    <h2>Add Product</h2>
+                    <input type="text" id="addProductId" name="productId" placeholder="Product ID" required />
+                    <input type="text" id="addProductName" name="productName" placeholder="Product Name" required />
+                    <input type="text" id="addDescription" name="description" placeholder="Description" required />
+                    <input type="number" id="addPrice" name="price" step="0.01" placeholder="Price" required />
+                    <input type="number" id="addInventory" name="inventory" placeholder="Inventory" required />
+                </div>
+                <input type="submit" value="Add Product" />
+            </form>
+        </div>
+
+        <!-- Iterate over the products list -->
+        <div th:each="product : ${products}" class="product">
+            <div class="product-image">
+                <!-- Display product image here -->
+            </div>
+            <div class="product-details">
+                <h2 th:text="${product.productName}"></h2>
+                <p th:text="${product.description}"></p>
+                <p>$<span th:text="${product.price}"></span></p>
+                    <input type="hidden" id="productId" name="productId" th:value="${product.productId}" />
+                    <input type="number" id="quantity" name="quantity" min="1" value="1" />
+                    <button type="submit" value="Add to Cart" >Add to Cart</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

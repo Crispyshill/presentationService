@@ -1,16 +1,29 @@
-package com.transcendenttopicals.presentationService;
+package controllers;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+
+import domain.Product;
+import services.PresentationService;
+import services.ProductService;
 
 
 
@@ -20,11 +33,9 @@ public class PresentationController {
 	
 	@Autowired 
 	PresentationService presentationService;
-
+	@Autowired
+	ProductService productService;
 	
-	private RestTemplate restTemplate = new RestTemplate();
-    private String productServiceUrl = "http://localhost:8001"; // Replace with the actual URL of the ProductService
-
     
     @GetMapping("/")
     public String root(Model model) {
@@ -42,14 +53,14 @@ public class PresentationController {
     
     @GetMapping("/products")
     public String getProducts(Model model) {
-        // Make an HTTP GET request to the ProductService API to retrieve the filled-in Thymeleaf template
-        ResponseEntity<String> response = restTemplate.getForEntity(productServiceUrl + "/products", String.class);
-        String template = response.getBody();
+        
+        List<Product> products = presentationService.getProducts();
 
         // Add the template content to the model
-        model.addAttribute("template", template);
         model.addAttribute("page", "products");
-        model.addAttribute("isAdmin", presentationService.isAdmin());
+        model.addAttribute("templateinclude", "products.html");
+        model.addAttribute("products", products);
+        model.addAttribute("isAdmin", false); //TODO implement
 
         // Return the view name for rendering
         return "home";
@@ -62,9 +73,11 @@ public class PresentationController {
     	return "home";
     }
     
-    @GetMapping("/shoppingcart")
+    @GetMapping("/cart")
     public String shoppingcart(Model model) {
+    	 
     	model.addAttribute("page", "cart");
+        //model.addAttribute("cartItems", cart);
 
     	return "shoppingcart";
     }
@@ -89,10 +102,12 @@ public class PresentationController {
 	
 	 @GetMapping("/login") 
 	 public String login(Model model) {
+		 
 	    	model.addAttribute("page", "login");
 	    	model.addAttribute("templateinclude", "login.html");
 
 	 return "home"; }
 	 
+	
 
 }
